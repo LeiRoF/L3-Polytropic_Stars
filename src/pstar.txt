@@ -1,0 +1,21 @@
+Standard Solar Model (BP2004)
+
+astro-ph/0402114
+
+Columns in the Standard Model table (below) represent:
+
+1)  Mass fraction in units of the solar mass
+2)  Radius of the zone in units of one solar radius
+3)  Temperature in units of deg (K)
+4)  Density in units of g/cm^3
+5)  Pressure in units of dyn/cm^2
+6)  Luminosity fraction in units of the solar luminosity
+7)  X(^1H): the hydrogen mass fraction
+8)  X(^4He): the helium 4 mass fraction
+9)  X(^3He): the helium 3 mass fraction
+10) X(^12C): the carbon 12 mass fraction
+11) X(^14N): the nitrogen 14 mass fraction
+12) X(^16O): the oxygen 16 mass fraction
+
+The Table begins here.
+
