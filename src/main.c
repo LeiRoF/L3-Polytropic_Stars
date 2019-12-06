@@ -15,14 +15,14 @@ int main( void ){
 	double* dtheta_dx = (double *) calloc (nx, sizeof(double));
 	double* x = (double *) calloc (nx, sizeof(double));
 
-	// Calcul de Pc - fonction (11)
-	double Pc = G / (4 * pi) * Mstar * Mstar / (Rstar * Rstar * dtheta_dx[xstar] * dtheta_dx[xstar]);
+	// Compute Pc - fonction (11)
+	int tmp = (int) xstar;
+	double Pc = G / (4 * pi) * Mstar * Mstar / (Rstar * Rstar * dtheta_dx[tmp] * dtheta_dx[tmp]);
 	
-	// Calcul de Rhoc - fonction (10)
-	double Pc = Mstar * xstar/ (Rstar * Rstar * Rstar * 4 * pi * dtheta_dx[xstar]);
-	free(&tmp)
+	// Compute Rhoc - fonction (10)
+	double rho_c = Mstar * xstar/ (Rstar * Rstar * Rstar * 4 * pi * dtheta_dx[tmp]);
 	
-	// Calcul de Delta - fonction (32)
+	// Compute Delta - fonction (32)
 	double delta = a/3
 		*(mu*amu/kb)
 		*(mu*amu/kb)
@@ -31,7 +31,7 @@ int main( void ){
 		*Pc*Pc*Pc
 		/pow(rho_c, 3*(n+1)/n);
 		
-	// Calcul de Beta - Methode de Newton-Rapshon sur la fonction (31)
+	// Compute Beta - Newton-Rapshon method on fonction (31)
 	compute_beta(delta,1.0,1e-8);
 	
 	

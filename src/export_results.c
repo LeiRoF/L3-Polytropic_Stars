@@ -34,3 +34,12 @@ void export(){
 	fclose(file);
 }
 
+void export_theta_i(size_t i, double theta){
+	FILE* file;
+	file = fopen("theta_i.dat", "w");
+	
+	fprintf(file, "%lf %lf\n", i, theta);
+	
+	fclose(file);
+}
+

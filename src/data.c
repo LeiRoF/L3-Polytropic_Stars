@@ -7,20 +7,21 @@ const double amu = 1.66053873e-27;	// kg
 const double pi = 3.14159265358979323846;
 
 void boundary_values(size_t nx, double* const x, double* const theta, double dx, double* xstar, double* dtheta_dxstar){
-	/* TODO */
-
+	
 	double xs[2], a, b, c;
-	a=0;
-	b=0;
-	c=0;
+	int tmp = (int) *xstar;
+	a= theta[tmp] - 2*x[tmp-1] + theta[tmp-2];
+	b= theta[tmp] * (x[tmp-2] + x[tmp-1]) - 2*theta[tmp-1] * (x[tmp] + x[tmp-2]) + theta[tmp-2] * (x[tmp] + x[tmp-1]);
+	c= theta[tmp] * x[tmp-2] * x[tmp-1] - 2*theta[tmp-1] * x[tmp] * x[tmp-2] + theta[tmp-2] * x[tmp] * x[tmp-1];
 	xs[0] = (-b+sqrt(b*b-4*a*c))/(2*a);
 	xs[0] = (-b-sqrt(b*b-4*a*c))/(2*a);
+	
 }
 
 /*********/
 /* THETA */
 /*********/
-
+/*
 double compute_theta_i(double i, double dx, double x, double n){
 	double theta = 1;
 	double theta_old = 0;
@@ -50,7 +51,7 @@ double compute_next_theta(double theta, double theta_old, double dx, double x, d
 			*x*x
 		);
 	return theta;
-}
+}*/
 
 /********/
 /* BETA */

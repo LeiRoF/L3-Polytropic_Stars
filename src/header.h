@@ -7,7 +7,7 @@
 #define TRUE 1
 #define FALSE 0
 
+#include "export_results.c"
 #include "data.c"
 #include "utils.c"
 #include "lane_emden.c"
-#include "export_results.c"
