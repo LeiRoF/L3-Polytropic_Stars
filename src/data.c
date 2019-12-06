@@ -6,16 +6,30 @@ const double a = 7.565767e-16;	// J*m^{-3}*K^{-4}
 const double amu = 1.66053873e-27;	// kg
 const double pi = 3.14159265358979323846;
 
+// Compute fonction (28) with (29) method
 void boundary_values(size_t nx, double* const x, double* const theta, double dx, double* xstar, double* dtheta_dxstar){
 	
 	double xs[2], a, b, c;
 	int tmp = (int) *xstar;
-	a= theta[tmp] - 2*x[tmp-1] + theta[tmp-2];
-	b= theta[tmp] * (x[tmp-2] + x[tmp-1]) - 2*theta[tmp-1] * (x[tmp] + x[tmp-2]) + theta[tmp-2] * (x[tmp] + x[tmp-1]);
-	c= theta[tmp] * x[tmp-2] * x[tmp-1] - 2*theta[tmp-1] * x[tmp] * x[tmp-2] + theta[tmp-2] * x[tmp] * x[tmp-1];
-	xs[0] = (-b+sqrt(b*b-4*a*c))/(2*a);
-	xs[0] = (-b-sqrt(b*b-4*a*c))/(2*a);
 	
+	// x +- = (-b +- sqrt(b^2 - 4ac)) / (2a)
+	a= theta[nx] - 2*x[nx-1] + theta[nx-2];
+	b= theta[nx] * (x[nx-2] + x[nx-1]) - 2*theta[nx-1] * (x[nx] + x[nx-2]) + theta[nx-2] * (x[nx] + x[nx-1]);
+	c= theta[nx] * x[nx-2] * x[nx-1] - 2*theta[nx-1] * x[nx] * x[nx-2] + theta[nx-2] * x[nx] * x[nx-1];
+	
+	xs[0] = (-b+sqrt(b*b-4*a*c))/(2*a);
+	xs[1] = (-b-sqrt(b*b-4*a*c))/(2*a);
+	
+	if(xs[0] >= x[nx-1] && xs[0] <= x[nx])
+		*xstar = xs[0];
+	else
+		*xstar = xs[1];
+	
+}
+
+// Comute functuon (30)
+void compute_dtheta_dxstar(size_t nx, double* const x, double* const theta, double dx, double* xstar, double* dtheta_dxstar){
+	*dtheta_dxstar = theta[nx] * (2*(*xstar) * - x[nx-2] - x[nx-1])/(2*dx*dx)   -    theta[nx-1] * (2*(*xstar) * - x[nx] - x[nx-2])/(2*dx*dx)   +   theta[nx-2] * (2*(*xstar) * - x[nx-1] - x[nx])/(2*dx*dx);
 }
 
 // Compute Pc - fonction (11)
@@ -60,39 +74,3 @@ double compute_beta(double delta, double beta0, double epsilon){
 	
 	return beta ;
 }
-
-
-/*********/
-/* THETA */
-/*********/
-/*
-double compute_theta_i(double i, double dx, double x, double n){
-	double theta = 1;
-	double theta_old = 0;
-	double j=0;
-
-	do{
-		theta += 1/(
-				(1-dx/(2*x))*(1-dx/(2*x)))
-			*(
-				(1-dx/(2*x))*(1-dx/(2*x))
-				*(theta - theta_old)
-				-pow(theta,n)
-				*x*x
-			);
-		j++;
-	}while(j<i);
-	return theta;
-}
-
-double compute_next_theta(double theta, double theta_old, double dx, double x, double n){
-	theta += 1/(
-			(1-dx/(2*x))*(1-dx/(2*x)))
-		*(
-			(1-dx/(2*x))*(1-dx/(2*x))
-			*(theta - theta_old)
-			-pow(theta,n)
-			*x*x
-		);
-	return theta;
-}*/
