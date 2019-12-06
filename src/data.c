@@ -12,7 +12,7 @@ void boundary_values(size_t nx, double* const x, double* const theta, double dx,
 	double xs[2], a, b, c;
 	int tmp = (int) *xstar;
 	
-	// x +- = (-b +- sqrt(b^2 - 4ac)) / (2a)
+	// Attribution of a,b & c for solution: x+- = (-b +- sqrt(b^2 - 4ac)) / (2a)
 	a= theta[nx] - 2*x[nx-1] + theta[nx-2];
 	b= theta[nx] * (x[nx-2] + x[nx-1]) - 2*theta[nx-1] * (x[nx] + x[nx-2]) + theta[nx-2] * (x[nx] + x[nx-1]);
 	c= theta[nx] * x[nx-2] * x[nx-1] - 2*theta[nx-1] * x[nx] * x[nx-2] + theta[nx-2] * x[nx] * x[nx-1];
