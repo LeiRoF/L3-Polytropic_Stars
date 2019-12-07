@@ -23,6 +23,9 @@ int main( void ){
 	size_t nx = 1024;
 	double* theta = (double *) calloc (nx, sizeof(double));
 	double* x = (double *) calloc (nx, sizeof(double));
+	double* rho = (double *) calloc (nx, sizeof(double));
+	double* P = (double *) calloc (nx, sizeof(double));
+	double* T = (double *) calloc (nx, sizeof(double));
 	
 	
 	
@@ -52,11 +55,20 @@ int main( void ){
 		
 	// Compute Beta - Newton-Rapshon method on fonction (31)
 	double beta = compute_beta(delta,1.0,1e-8);
-	printf("\nbeta: %lf\n", beta);	
+	printf("\nbeta: %lf\n", beta);
+	
+	// Compute rho(x) - function (12)
+	compute_rho(nx, rho, rho_c, theta, n);
+	
+	// Compute P(x) - function (13)
+	compute_P(nx, P, Pc, theta, n);
+	
+	// Compute T(x) - function (16)
+	compute_T(nx, T, mu, beta, Pc, rho_c, theta);
 	
 	// Export f(beta)
 	for (double i = 0; i<1000; i++){
-		export_beta(i/100, f(i/100, delta), TRUE);
+		export_for_grace(i/100, f(i/100, delta), "beta.dat", (int) i);
 	}
 	
 	export();

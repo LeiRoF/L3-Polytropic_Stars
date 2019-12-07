@@ -1,10 +1,4 @@
-const double Msun = 1.9891e30;	// kg
-const double Rsun = 6.95508e8;	// m
-const double G = 6.673e-11;		// N*m^2*kg^(-2)
-const double kb = 1.3806503e-23;	// J*K^(-1)
-const double a = 7.565767e-16;	// J*m^{-3}*K^{-4}
-const double amu = 1.66053873e-27;	// kg
-const double pi = 3.14159265358979323846;
+
 
 // Compute fonction (28) with (29) method
 void boundary_values(size_t nx, double* const x, double* const theta, double dx, double* xstar, double* dtheta_dxstar){
@@ -81,3 +75,28 @@ double compute_beta(double delta, double beta0, double epsilon){
 	
 	return beta ;
 }
+
+// Compute rho(x) - function (12)
+void compute_rho(size_t nx, double* rho, double rho_c, double* theta, double n){
+	for(size_t i = 0; i<nx; i++){
+		rho[i] = rho_c * pow(theta[i], n);
+		export_for_grace((double) i/(nx-1), rho[i], "rho_x.dat", (int) i);
+	}
+}
+
+// Compute P(x) - function (13)
+void compute_P(size_t nx, double* P, double Pc, double* theta, double n){
+	for(size_t i = 0; i<nx; i++){
+		P[i] = Pc * pow(theta[i], n+1);
+		export_for_grace((double) i/(nx-1), P[i], "P_x.dat", (int) i);
+	}
+}
+
+// Compute T(x) - function (16)
+void compute_T(size_t nx, double* T, double mu, double beta, double Pc, double rho_c, double* theta){
+	for(size_t i = 0; i<nx; i++){
+		T[i] = mu*amu*beta/kb * Pc/rho_c * theta[i];
+		export_for_grace((double) i/(nx-1), T[i], "T_x.dat", (int) i);
+	}
+}
+
