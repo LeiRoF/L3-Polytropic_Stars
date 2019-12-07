@@ -16,14 +16,14 @@ void boundary_values(size_t nx, double* const x, double* const theta, double dx,
 	xs[0] = (-b+sqrt(b*b-4*a*c))/(2*a);
 	xs[1] = (-b-sqrt(b*b-4*a*c))/(2*a);
 
-	printf("A: %lf   B: %lf   C: %lf   x[i-1]: %lf   x[i]: %lf   x+: %lf   x-: %lf\n", a, b, c, x[i-1], x[i], xs[0], xs[1]);
+	//printf("A: %lf   B: %lf   C: %lf   x[i-1]: %lf   x[i]: %lf   x+: %lf   x-: %lf\n", a, b, c, x[i-1], x[i], xs[0], xs[1]);
 	
 	if(xs[0] >= x[i-1] && xs[0] <= x[i])
 		*xstar = xs[0];
 	else if(xs[1] >= x[i-1] && xs[1] <= x[i])
 		*xstar = xs[1];
 	else{
-		printf("[ERROR] Unable to compute Xstar. Assuming x[i-1] = Xstar\n");
+		printf("\n[ERROR] Unable to compute Xstar. Assuming x[i-1] = Xstar\n");
 		*xstar = x[i-1];
 	}
 		
@@ -31,9 +31,11 @@ void boundary_values(size_t nx, double* const x, double* const theta, double dx,
 }
 
 // Comute functuon (30)
-void compute_dtheta_dxstar(size_t nx, double* const x, double* const theta, double dx, double* xstar, double* dtheta_dxstar){
+void compute_dtheta_dxstar(size_t nx, double* const x, double* const theta, double dx, double xstar, double* dtheta_dxstar){
 	size_t i = nx-1;
-	*dtheta_dxstar = theta[i] * (2*(*xstar) * - x[i-2] - x[i-1])/(2*dx*dx)   -    theta[i-1] * (2*(*xstar) * - x[i] - x[i-2])/(2*dx*dx)   +   theta[i-2] * (2*(*xstar) * - x[i-1] - x[i])/(2*dx*dx);
+	
+	//printf("theta[i] %lf   theta[i-1] %lf   theta[i-2] %lf   x[i] %lf   x[i-1] %lf   x[i-2] %lf   Xs %lf   dx %lf", theta[i] , theta[i-1] , theta[i-2] , x[i] , x[i-1] , x[i-2] , xstar , dx);
+	*dtheta_dxstar = theta[i] * (2*xstar - x[i-2] - x[i-1])/(2*dx*dx)   -    theta[i-1] * (2*xstar - x[i] - x[i-2])/(2*dx*dx)   +   theta[i-2] * (2*xstar - x[i-1] - x[i])/(2*dx*dx);
 }
 
 // Compute Pc - fonction (11)
@@ -43,7 +45,7 @@ double compute_Pc(double Mstar, double Rstar, double dtheta_xstar){
 
 // Compute Rhoc - fonction (10)
 double compute_rho_c(double Mstar, double Rstar, double xstar, double dtheta_xstar){
-	return Mstar * xstar/ (Rstar * Rstar * Rstar * 4 * pi * dtheta_xstar);
+	return Mstar * xstar/ (Rstar * Rstar * Rstar * 4 * pi * fabs(dtheta_xstar));
 }
 
 // Compute Delta - fonction (32)
@@ -77,26 +79,32 @@ double compute_beta(double delta, double beta0, double epsilon){
 }
 
 // Compute rho(x) - function (12)
-void compute_rho(size_t nx, double* rho, double rho_c, double* theta, double n){
+void compute_rho(size_t nx, double* rho, double rho_c, double* theta, double* x, double n){
 	for(size_t i = 0; i<nx; i++){
+		if((int) i%100 == 0)
+			printf(".");
 		rho[i] = rho_c * pow(theta[i], n);
-		export_for_grace((double) i/(nx-1), rho[i], "rho_x.dat", (int) i);
+		export_for_grace(x[i]/x[nx-1], rho[i], "rho_x.dat", (int) i);
 	}
 }
 
 // Compute P(x) - function (13)
-void compute_P(size_t nx, double* P, double Pc, double* theta, double n){
+void compute_P(size_t nx, double* P, double Pc, double* theta, double* x, double n){
 	for(size_t i = 0; i<nx; i++){
+		if((int) i%100 == 0)
+			printf(".");
 		P[i] = Pc * pow(theta[i], n+1);
-		export_for_grace((double) i/(nx-1), P[i], "P_x.dat", (int) i);
+		export_for_grace(x[i]/x[nx-1], P[i], "P_x.dat", (int) i);
 	}
 }
 
 // Compute T(x) - function (16)
-void compute_T(size_t nx, double* T, double mu, double beta, double Pc, double rho_c, double* theta){
+void compute_T(size_t nx, double* T, double mu, double beta, double Pc, double rho_c, double* theta, double* x){
 	for(size_t i = 0; i<nx; i++){
+		if((int) i%100 == 0)
+			printf(".");
 		T[i] = mu*amu*beta/kb * Pc/rho_c * theta[i];
-		export_for_grace((double) i/(nx-1), T[i], "T_x.dat", (int) i);
+		export_for_grace(x[i]/x[nx-1], T[i], "T_x.dat", (int) i);
 	}
 }
 
