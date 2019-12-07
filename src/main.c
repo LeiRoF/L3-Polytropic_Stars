@@ -12,7 +12,7 @@ int main( void ){
 	double X = 0.7; /* H abundance */
 	double mu = 4. / (3. + 5. * X) ;
 	double n = 3.;
-	double dx = 0.1;
+	double dx = 0.01;
 	
 	/* Variable declaration */
 	double xstar = 0.;
@@ -53,6 +53,11 @@ int main( void ){
 	// Compute Beta - Newton-Rapshon method on fonction (31)
 	double beta = compute_beta(delta,1.0,1e-8);
 	printf("\nbeta: %lf\n", beta);	
+	
+	// Export f(beta)
+	for (double i = 0; i<1000; i++){
+		export_beta(i/100, f(i/100, delta), TRUE);
+	}
 	
 	export();
 	return EXIT_SUCCESS;

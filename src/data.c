@@ -12,29 +12,39 @@ void boundary_values(size_t nx, double* const x, double* const theta, double dx,
 	double xs[2], a, b, c;
 	int tmp = (int) *xstar;
 	
+	size_t i = nx-1;
+	
 	// Attribution of a,b & c for solution: x+- = (-b +- sqrt(b^2 - 4ac)) / (2a)
-	a= theta[nx] - 2*x[nx-1] + theta[nx-2];
-	b= theta[nx] * (x[nx-2] + x[nx-1]) - 2*theta[nx-1] * (x[nx] + x[nx-2]) + theta[nx-2] * (x[nx] + x[nx-1]);
-	c= theta[nx] * x[nx-2] * x[nx-1] - 2*theta[nx-1] * x[nx] * x[nx-2] + theta[nx-2] * x[nx] * x[nx-1];
+	a= theta[i] - 2*theta[i-1] + theta[i-2];
+	b= -theta[i] * (x[i-2] + x[i-1]) + 2*theta[i-1] * (x[i] + x[i-2]) - theta[i-2] * (x[i] + x[i-1]);
+	c= theta[i] * x[i-2] * x[i-1] - 2*theta[i-1] * x[i] * x[i-2] + theta[i-2] * x[i] * x[i-1];
 	
 	xs[0] = (-b+sqrt(b*b-4*a*c))/(2*a);
 	xs[1] = (-b-sqrt(b*b-4*a*c))/(2*a);
+
+	printf("A: %lf   B: %lf   C: %lf   x[i-1]: %lf   x[i]: %lf   x+: %lf   x-: %lf\n", a, b, c, x[i-1], x[i], xs[0], xs[1]);
 	
-	if(xs[0] >= x[nx-1] && xs[0] <= x[nx])
+	if(xs[0] >= x[i-1] && xs[0] <= x[i])
 		*xstar = xs[0];
-	else
+	else if(xs[1] >= x[i-1] && xs[1] <= x[i])
 		*xstar = xs[1];
+	else{
+		printf("[ERROR] Unable to compute Xstar. Assuming x[i-1] = Xstar\n");
+		*xstar = x[i-1];
+	}
+		
 	
 }
 
 // Comute functuon (30)
 void compute_dtheta_dxstar(size_t nx, double* const x, double* const theta, double dx, double* xstar, double* dtheta_dxstar){
-	*dtheta_dxstar = theta[nx] * (2*(*xstar) * - x[nx-2] - x[nx-1])/(2*dx*dx)   -    theta[nx-1] * (2*(*xstar) * - x[nx] - x[nx-2])/(2*dx*dx)   +   theta[nx-2] * (2*(*xstar) * - x[nx-1] - x[nx])/(2*dx*dx);
+	size_t i = nx-1;
+	*dtheta_dxstar = theta[i] * (2*(*xstar) * - x[i-2] - x[i-1])/(2*dx*dx)   -    theta[i-1] * (2*(*xstar) * - x[i] - x[i-2])/(2*dx*dx)   +   theta[i-2] * (2*(*xstar) * - x[i-1] - x[i])/(2*dx*dx);
 }
 
 // Compute Pc - fonction (11)
 double compute_Pc(double Mstar, double Rstar, double dtheta_xstar){
-	return G / (4 * pi) * Mstar * Mstar / (Rstar * Rstar * dtheta_xstar * dtheta_xstar);
+	return G / (4 * pi) * Mstar * Mstar / (Rstar * Rstar * Rstar * Rstar * dtheta_xstar * dtheta_xstar);
 }
 
 // Compute Rhoc - fonction (10)
@@ -44,12 +54,9 @@ double compute_rho_c(double Mstar, double Rstar, double xstar, double dtheta_xst
 
 // Compute Delta - fonction (32)
 double compute_delta(double Pc, double rho_c, double n, double mu){
-	return a/3
-		*(mu*amu/kb)
-		*(mu*amu/kb)
-		*(mu*amu/kb)
-		*(mu*amu/kb)
-		*Pc*Pc*Pc
+	double tmp = (mu*amu/kb);
+	tmp = tmp*tmp*tmp*tmp;
+	return a/3*tmp*Pc*Pc*Pc
 		/pow(rho_c, 3*(n+1)/n);
 }
 

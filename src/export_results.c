@@ -46,3 +46,14 @@ void export_theta_i(double i, double theta, int write_after){
 	fclose(file);
 }
 
+void export_beta(double i, double theta, int write_after){
+	FILE* file;
+	if(write_after)
+		file = fopen("beta.dat", "aw");	
+	else
+		file = fopen("beta.dat", "w");
+	
+	fprintf(file, "%lf %lf\n", i, theta);
+	
+	fclose(file);
+}

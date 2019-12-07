@@ -48,13 +48,28 @@ int lane_emden(size_t* nx, double** x, double** theta, double n, double dx){
         
         (*theta)[i + 1] = (*theta)[i] + A * (B * ((*theta)[i] - (*theta)[i - 1]) - dx2 * pow((*theta)[i], (double) n)); /* DONE ? : you need to code the scheme here */
         
-		printf("i: %d   nx: %d   x: %lf   theta[i+1]: %lf   A: %lf   B: %d   theta^n: %lf\n", (int) i, (int) *nx, (*x)[i], (*theta)[i + 1], A, B, pow((*theta)[i], (double) n));
+		printf("i: %d   nx: %d   x[i]: %lf   theta[i+1]: %lf   A: %lf   B: %d\n", (int) i, (int) *nx, (*x)[i], (*theta)[i + 1], A, B);
         
         export_theta_i(cpt, (*theta)[i+1], TRUE);
+        
+        
+        if(i+1 == *nx && (*theta)[i + 1] > 0.0){
+			*nx += 1024;
+			/* We realloc again to the actual size , in order to free the useless memory */
+			ierr = resize(*nx, x);
+			if (!ierr ){
+				return ierr;
+			}
+			ierr = resize(*nx, theta );
+			if(!ierr){
+				return ierr;
+			}
+		}
+        
 	
 		/* We reached the outer boundary */
 		
-		if((*theta) [i + 1] <= 0.){
+		if((*theta)[i + 1] <= 0.0){
 			*nx = i + 2;
 			/* We realloc again to the actual size , in order to free the useless memory */
 			ierr = resize(*nx, x);
