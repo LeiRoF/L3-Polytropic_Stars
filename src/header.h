@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
+#include <float.h>
 
 #define REALLOC_FACTOR 1.25
 #define TRUE 1

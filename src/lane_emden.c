@@ -1,4 +1,4 @@
-int lane_emden(size_t* nx, double** x, double** theta, double n, double dx){
+int lane_emden(size_t* nx, double** x, double** theta, double n, double dx, double** dtheta_dx){
 	int ierr;
 	size_t size = *nx;
 	double dx2 = dx * dx;
@@ -8,6 +8,7 @@ int lane_emden(size_t* nx, double** x, double** theta, double n, double dx){
 	/* TODO : you might need some definitions */
 	(*theta)[0] = 1;
 	(*theta)[1] = 1;
+	(*dtheta_dx)[0] = 0;
 	(*x)[0] = -1.0/2 * dx;
 	(*x)[1] = (1 - 1.0/2)*dx;
 	
@@ -49,7 +50,8 @@ int lane_emden(size_t* nx, double** x, double** theta, double n, double dx){
 			*(1 - dx / ( 2 * (*x)[i] ));
         
         
-        (*theta)[i + 1] = (*theta)[i] + A * (B * ((*theta)[i] - (*theta)[i - 1]) - dx2 * pow((*theta)[i], (double) n)); /* DONE ? : you need to code the scheme here */
+        (*theta)[i + 1] = (*theta)[i] + A * (B * ((*theta)[i] - (*theta)[i - 1]) - dx2 * pow((*theta)[i], (double) n));
+        (*dtheta_dx)[i] = ((*theta)[i+1] - (*theta)[i-1]) / (2*dx);
         
 		//printf("i: %d   nx: %d   x[i]: %lf   theta[i+1]: %lf   A: %lf   B: %d\n", (int) i, (int) *nx, (*x)[i], (*theta)[i + 1], A, B);
         
