@@ -32,6 +32,8 @@ int main(void){
 	printf(" Export dans theta_x.dat\n");
 	// nx = i_star
 
+	rk4(x, n, nx);
+
 	// compute xstar - function (28)
 	printf("[INFO] Determination de x_star ...");
 	boundary_values(nx, x, theta, dx, ptxstar, dtheta_dxs);
@@ -89,10 +91,13 @@ int main(void){
 			printf(".");
 		export_for_grace(i/100, f(i/100, delta), "beta.dat", (int) i);
 	}
-	printf(" Ok.\n\n");
+	printf(" Ok.\n");
 	
 	write_results(nx, mu, xstar, beta, Pc, rho_c, x, rho, P, T, m);
-	
+
+	printf("Mstar= %e\n", compute_Mstar(xstar, dtheta_dxstar));
+
+	printf("\n");	
 	return EXIT_SUCCESS;
 }
 
