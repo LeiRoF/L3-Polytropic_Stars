@@ -16,7 +16,14 @@ const double a = 7.565767e-16;	// J*m^{-3}*K^{-4}
 const double amu = 1.66053873e-27;	// kg
 const double pi = 3.14159265358979323846;
 
+const double h = 6.62607015e-34;
+const double c = 299792458;
+const double mu_e = 2;
+const double Na = 6.02214086e23;
+const double m_p = 1e-3/Na;
+
 #include "export_results.c"
 #include "compute.c"
 #include "utils.c"
+#include "rk.c"
 #include "lane_emden.c"
