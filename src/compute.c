@@ -120,10 +120,11 @@ void compute_m(size_t nx, double* m, double Mstar, double* x, double xstar, doub
 	}
 }
 
+// Masse limite de Chandrasekhar
 double compute_Mstar(double xstar, double dtheta_dxstar){
 	double Mstar;
 
-	Mstar = sqrt(3)*pi/2*pow((h*c/(G*2*pi)),3/2)*xstar*xstar*fabs(dtheta_dxstar)/(mu_e*mu_e*m_p*m_p);
+	Mstar = sqrt(3*pi)/2 * pow((h*c/(G*2*pi)),1.5)*xstar*xstar*fabs(dtheta_dxstar)/(mu_e*mu_e*m_p*m_p);
 
 	return Mstar;
 }

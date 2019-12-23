@@ -32,7 +32,8 @@ int main(void){
 	printf(" Export dans theta_x.dat\n");
 	// nx = i_star
 
-	rk4(x, n, nx);
+	rk4_bis(x, n, nx);
+	//rk4(x, n, nx);
 
 	// compute xstar - function (28)
 	printf("[INFO] Determination de x_star ...");
@@ -95,7 +96,7 @@ int main(void){
 	
 	write_results(nx, mu, xstar, beta, Pc, rho_c, x, rho, P, T, m);
 
-	printf("Mstar= %e\n", compute_Mstar(xstar, dtheta_dxstar));
+	printf("\nMasse limite de Chandrasekhar: %e\n", compute_Mstar(xstar, dtheta_dxstar));
 
 	printf("\n");	
 	return EXIT_SUCCESS;

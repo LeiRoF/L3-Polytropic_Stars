@@ -20,7 +20,7 @@ const double h = 6.62607015e-34;
 const double c = 299792458;
 const double mu_e = 2;
 const double Na = 6.02214086e23;
-const double m_p = 1e-3/Na;
+const double m_p = 1.67493e-27;
 
 #include "export_results.c"
 #include "compute.c"
